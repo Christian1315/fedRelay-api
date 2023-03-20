@@ -14,7 +14,7 @@ La cible est : les e-commerçant, les personnes âgées de 18ans - 40ans qui ont
 
 Accéder au projet
 ```bash
-$ git clone https://github.com/Innov-Prime/fedrelay-api-v1.git
+$ git clone https://github.com/Innov-Prime/fedRelay-api.git
 $ cd api-fedrelay
 
 ```
