@@ -1,0 +1,14 @@
+﻿asgiref
+Django
+mysqlclient
+django-cors-headers
+django-filter
+djangorestframework
+PyYAML
+requests
+django-rest-knox
+mailchimp_marketing
+whitenoise
+django_rest_passwordreset
+mailjet_rest
+

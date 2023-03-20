@@ -1,0 +1,13 @@
+venv
+env
+
+src\api\__pycache__
+src\contact\__pycache__
+src\livraison\__pycache__
+src\newsletter\__pycache__
+src\partenariat\__pycache__
+src\pointrelais\__pycache__
+src\signup\__pycache__
+src\simulation\__pycache__
+__pycache__
+db.sqlite3
