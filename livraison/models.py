@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from api.settings import AUTH_USER_MODEL
+
 
 # Create your models here.
 
@@ -44,11 +46,11 @@ class Delivery(models.Model):
     is_reception = models.BooleanField(default=False)
     is_termine = models.BooleanField(default=False)
 
-    client_id = models.IntegerField()
+    # client_id = models.IntegerField()
 
     ##================= RELATION ENTRE LE USER ET LA LIVRAISON =============##
 
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.IntegerField()
 
     created_date = models.DateField(auto_now=True)
 

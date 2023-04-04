@@ -1,45 +1,83 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from .models import MyUser
 
-from .utils import sendEmailBox
+from api.customModule.mailModule import signUpMail
+
+from profil.views import CreateProfile
+from knox.models import AuthToken
 from rest_framework.response import Response
+
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from knox.views import LoginView as KnoxLoginView
+from profil.models import ProfilModel
+from django.contrib.auth import login
+from django.forms.models import model_to_dict
+
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = MyUser
         fields = ('id', 'username', 'phone_Or_email')
 
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = MyUser
         fields = ('id', 'username', 'phone_Or_email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
+    def query_set():
+        return MyUser.objects.all()
+
+    def custom_user_create(self,request):
+        data = request.data
+
         #### ==== ENREGISTREMENT DU USER ===== ####
-        user = User.objects.create_user(validated_data['username'], validated_data['phone_Or_email'], validated_data['password'])
+        user = MyUser.objects.create_user(
+            username=data.get('username'),
+            phone_Or_email=data.get('phone_Or_email'),
+            password=data.get('password')
+        )
+        #### ==== CREATION DU PROFIL DU USER ===== ####
+        user_data = UserSerializer(user, context=self.get_serializer_context()).data
+
+        userProfil = CreateProfile.create(user_data)
 
         #======= ENVOIE DE MAIL AU RECEIVER ======#
-        email = validated_data['phone_Or_email']
-
+        user_email = data.get('phone_Or_email')
         subject = "Inscription sur FedRelay"
-        template = 'signup_email.html'
-        context = {
-            'email':email,
-        }
-        receivers = [email]
-        has_send = sendEmailBox(subject=subject,receivers=receivers,template=template,context=context)
+        signUpMail(email=user_email,subject=subject)
 
-        if has_send:
-            print('envoyé avec succes!!')
-        else:
-            print("L'envoie de mail a échoué!!")
-        return user
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "userProfil": userProfil
+        })
+
+
+class LoginSerializer(serializers.Serializer):
+    class Meta:
+        model = MyUser
+        fields = '__all__'
+
+    def custom_login(request):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        
+        login(request, user)
+
+        profil = ProfilModel.objects.get(user=user)
+        userProfile =  model_to_dict(profil)
+        return Response({
+                "user": UserSerializer(user).data,
+                "token": AuthToken.objects.create(user)[1],##Creation et récupération du Token user,
+                "userProfile":userProfile
+            })
 
 class ChangePasswordSerializer(serializers.Serializer):
-    model = User
+    class Meta:
+        model = MyUser
 
     """
     Serializer for password change endpoint.

@@ -21,7 +21,6 @@ urlpatterns = [
     path('delivery/',include('livraison.urls')),
     path('user/',include('signup.urls')),
     path('newsletter',include('newsletter.urls')),
-    path('simulator',include('simulation.urls')),
 
     path('user/',include('profil.urls')),
 
@@ -30,5 +29,5 @@ urlpatterns = [
     path('partenariat',include('partenariat.urls')),
     path('contact',include('contact.urls')),
 
-    path('chat/',include('chat.urls')),
+    # path('chat/',include('chat.urls')),
 ]

@@ -7,15 +7,12 @@ from rest_framework.response import Response
 
 # Create your views here.
 
-class PartenariatRegister(generics.CreateAPIView):
-    queryset = Partenariat.objects.all()
+class PartenariatRegister(generics.CreateAPIView,PartenariatSerializer):
     serializer_class = PartenariatSerializer
 
+    def get_queryset(self, *args, **kwargs):
+        # Appel au custom_query_set() de la PartenariatSerializer avec le super() helper
+        return super().custom_query_set(self, *args, **kwargs)
+    
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        data = {'success':True}
-        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return Response(data,headers=headers)
+        return super().partenariat_create(request, *args, **kwargs)

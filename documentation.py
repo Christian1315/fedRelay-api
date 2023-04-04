@@ -128,6 +128,14 @@ import requests
     LA REPONSE RETOURNEE COMPORTE TOUTES LES INFORMATIONS DU PROFIL DU USER
 '''
 
+
+'''
+##============ RECUPERATION DU PROFIL POUR UN USER ==========##
+
+    url = http://api.fedrelay.com/user/<int:user_id>/getprofil ## ON DOIT LUI ENVOYER UN JSON DATA ## LE TOKEN EST PASSE EN HEADERS
+
+'''
+
 '''
 ##============ ENREGISTREMENT D'UNE LIVRAISON==========##
 
@@ -137,7 +145,6 @@ import requests
 
     delivery = {
         "user":1, ##ICI IL FAUT RENSEIGNER L'ID DE L'UTILISATEUR QUI EST CONNECTE
-        "client_id":1, ##ICI IL FAUT AUSSI RENSEIGNER L'ID DE L'UTILISATEUR QUI EST CONNECTE
         "nomEmetteur": "SEDEGNAN",
         "prenomEmetteur": "Victoire",
         "telephoneEmetteur": "61765590",
@@ -174,7 +181,7 @@ import requests
 '''
 ##============ UPDATE D'UNE LIVRAISON==========##
 
-    url = http://api.fedrelay.com/delivery/<id>/update ## ON DOIT LUI ENVOYER UN JSON DATA ## LE TOKEN EST PASSE EN HEADERS
+    url = http://api.fedrelay.com/delivery/<id_commande>/update ## ON DOIT LUI ENVOYER UN JSON DATA ## LE TOKEN EST PASSE EN HEADERS
 
     FORME DU DATA JSON à ENVOYER
 
@@ -206,16 +213,7 @@ import requests
 
     EXEMPLE DE REQUEST:
 
-    requests.get(http://api.fedrelay.com/delivery/<int:foloow_code>/followup)
-
-    RETURN:
-
-    EN CAS DE SUCCES::
-    {
-        'success': True,
-        'command_status': 'En cours',##Ici C'est l'etat de la commande qui est renvoyé
-    }
-
+    requests.get(http://api.fedrelay.com/delivery/<str:follow_code>/followup)
 '''
 
 '''
