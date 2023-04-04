@@ -1,33 +1,30 @@
-from django.shortcuts import render
 from rest_framework import generics
-from .models import Relaypoint
 from .seriallizer import RelaySerializer
 
-from rest_framework.response import Response
-
-from knox.models import AuthToken
 from rest_framework.permissions import IsAuthenticated
 from knox.auth import TokenAuthentication
 
-# Create your views here.
-
-class GetAllRelayPointForUser(generics.ListAPIView):
+class GetAllRelayPointForUser(generics.ListAPIView,RelaySerializer):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     lookup_field = "quartier_id"
 
+    def get_queryset(self, *args, **kwargs):
+        # Appel au custom_query_set() de la RelaySerializer avec le super() helper
+        return super().custom_query_set(self, *args, **kwargs)
+
     def list(self, request, *args, **kwargs):
-        
-        query = Relaypoint.objects.filter(quartier_id=kwargs["quartier_id"]).order_by('-id')
-        serialisation = RelaySerializer(query,many=True).data
+        # Appel au custom_list() de la RelaySerializer avec le super() helper
+        return super().custom_list(self, request, *args, **kwargs)
 
-        return Response({'data':serialisation})
-
-
-class GetAllRelayPoint(generics.ListAPIView):
+class GetAllRelayPoint(generics.ListAPIView,RelaySerializer):
+    # === AUTHENTIFICATION ======#
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    queryset = Relaypoint.objects.all().order_by("-id")
     serializer_class = RelaySerializer
+
+    def get_queryset(self, *args, **kwargs):
+        # Appel au getall() de la RelaySerializer avec le super() helper
+        return super().getall(self, *args, **kwargs)

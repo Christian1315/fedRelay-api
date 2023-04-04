@@ -8,18 +8,17 @@ from rest_framework import status
 
 # Create your views here.
 
-class ContactRegister(generics.CreateAPIView):
-    queryset = Contact.objects.all()
+class ContactRegister(generics.CreateAPIView,ContactSerializer):
     serializer_class = ContactSerializer
 
+    def get_queryset(self, *args, **kwargs):
+        # Appel au custom_query_set() de la ContactSerializer avec le super() helper
+        return super().custom_query_set(self, *args, **kwargs)
+
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        data = {'success':True}
-        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+        # Appel au contact_create() de la ContactSerializer avec le super() helper
+        return super().contact_create(request, *args, **kwargs)
+        
 
 
     
