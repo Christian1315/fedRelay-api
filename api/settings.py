@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 
 DEBUG = False
-ALLOWED_HOSTS = ['51.83.42.15','http://www.fedrelay.com/']
+ALLOWED_HOSTS = ['51.83.42.15','.fedrelay.com']
 
 CORS_ALLOW_ALL_ORIGINS=True
 CORS_ALLOWED_ORIGINS = [
